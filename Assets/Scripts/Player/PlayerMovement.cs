@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 horizontalMovement;
     private Vector3 verticalMovement;
 
-    [SerializeField]
     private Animator animator;
 
     private bool isMoving;
@@ -21,6 +20,7 @@ public class PlayerMovement : MonoBehaviour {
     private void Start()
     { 
         rigid = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()

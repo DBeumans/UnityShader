@@ -19,7 +19,11 @@ public class InputManager : MonoBehaviour {
     private static bool key_shift;
     public static bool Get_Key_Shift { get { return key_shift; } }
 
+    private static bool key_e;
+    public static bool Get_Key_E { get { return key_e; } }
+
     private KeyCode keycode_shift = KeyCode.LeftShift;
+    private KeyCode keycode_e = KeyCode.E;
 
     private void Update()
     {
@@ -31,6 +35,7 @@ public class InputManager : MonoBehaviour {
         mouseY = Input.GetAxis("Mouse Y");
 
         key_shift = Input.GetKey(keycode_shift);
+        key_e = Input.GetKeyDown(keycode_e);
         
 
         if (Input.GetKeyDown(KeyCode.Space))
