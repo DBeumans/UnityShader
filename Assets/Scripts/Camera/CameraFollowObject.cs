@@ -8,37 +8,47 @@ public class CameraFollowObject : MonoBehaviour {
     private GameObject target;
 
     [SerializeField]
-    private float posX, posY, posZ;
-
     private Vector3 offset;
 
     private float horizontal;
+    private float vertical;
+
+    [SerializeField]
+    private float max_y, min_y;
 
     [SerializeField]
     private float rotationSpeed;
+
+    private float rotationVelocity;
+
+    [SerializeField]
+    private float movementSpeed;
 
     private CameraZoom cameraZoom;
 
     private void Start()
     {
         cameraZoom = GetComponent<CameraZoom>();
-
-
+        
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         horizontal = InputManager.Get_MouseX * rotationSpeed;
-        target.transform.Rotate(0, horizontal, 0);
+        vertical -= InputManager.Get_MouseY * rotationSpeed;
 
-        float desiredAngle = target.transform.eulerAngles.y;
-        var rotation = Quaternion.Euler(0,desiredAngle,0);
-        this.transform.position = target.transform.position - (rotation * offset);
+        vertical = Mathf.Clamp(vertical, min_y, max_y);
 
-        this.transform.LookAt(target.transform);
-        posZ = -cameraZoom.Get_Distance;
+        target.transform.Rotate(0, horizontal, 0); 
 
-        offset = new Vector3(posX, posY, posZ);
+        float angleY = Mathf.SmoothDampAngle(this.transform.eulerAngles.y, target.transform.eulerAngles.y, ref rotationVelocity, 0);
+        this.transform.rotation = Quaternion.Euler(vertical, angleY, 0);
+
+        Quaternion targetRotation = target.transform.rotation;
+
+        Vector3 newPos = targetRotation * offset;
+        newPos += target.transform.position;
         
+        this.transform.position = newPos;
     }
 }
