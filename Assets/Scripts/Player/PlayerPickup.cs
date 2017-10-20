@@ -6,41 +6,32 @@ public class PlayerPickup : MonoBehaviour {
 
     private InteractionText interactionText;
 
-    /// <summary>
-    /// Is the player in a item ?
-    /// </summary>
-    private bool inItem;
+    private PlayerCheckRange playerCheckRange;
 
     private void Start()
     {
+        playerCheckRange = GetComponent<PlayerCheckRange>();
         interactionText = FindObjectOfType<InteractionText>();
     }
-
+    
     private void Update()
     {
-        if (!inItem)
+        if (!playerCheckRange.CheckRange(this.gameObject, PlayerData.ActiveItem, playerCheckRange.Range/3))
+        {
+            interactionText.SetText("");
             return;
+        }
+        interactionText.SetText("Press E to eat " + PlayerData.ActiveItem);
 
+        checkInput();
+        
+    }
+
+    private void checkInput()
+    {
         if (!InputManager.Get_Key_E)
             return;
 
-
         PlayerIncreaseWeight.WeightEvent();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "pickup")
-        {
-            interactionText.SetText("Press E to eat " + other.name);            
-            inItem = true;
-            PlayerData.ActiveItem = other.gameObject;
-        }
-    }
-
-    private void OnTriggerExit()
-    {
-        interactionText.SetText("");
-        inItem = false;
     }
 }

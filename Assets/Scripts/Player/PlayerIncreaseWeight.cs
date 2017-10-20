@@ -13,7 +13,6 @@ public class PlayerIncreaseWeight : MonoBehaviour {
     [SerializeField]
     private float max_weight;
 
-    [SerializeField]
     private float amount;
 
     public static Action WeightEvent;
@@ -35,6 +34,16 @@ public class PlayerIncreaseWeight : MonoBehaviour {
     {
         if (currentWeight >= max_weight)
             return;
+
+        GameObject go = PlayerData.ActiveItem;
+        Item goItem = go.GetComponent<Item>();
+
+        if (goItem == null)
+            Debug.LogError("Please add Item script to " + go.name);
+
+        amount = goItem.Calories;
+
+        Debug.Log(amount);
 
         for (int i = 0; i < materials.Length; i++)
         {

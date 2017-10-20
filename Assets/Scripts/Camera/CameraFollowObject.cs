@@ -18,7 +18,7 @@ public class CameraFollowObject : MonoBehaviour {
 
     [SerializeField]
     private float rotationSpeed;
-
+    
     private float rotationVelocity;
 
     [SerializeField]
@@ -47,8 +47,10 @@ public class CameraFollowObject : MonoBehaviour {
         Quaternion targetRotation = target.transform.rotation;
 
         Vector3 newPos = targetRotation * offset;
-        newPos += target.transform.position;
+        newPos += new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
+        
         
         this.transform.position = newPos;
+        
     }
 }
