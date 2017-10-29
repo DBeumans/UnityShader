@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class PlayerPickup : MonoBehaviour {
 
-    private InteractionText interactionText;
+    private UIText canvasText;
 
     private PlayerCheckRange playerCheckRange;
 
     private void Start()
     {
         playerCheckRange = GetComponent<PlayerCheckRange>();
-        interactionText = FindObjectOfType<InteractionText>();
+        canvasText = FindObjectOfType<UIText>();
     }
     
     private void Update()
     {
-        if (!playerCheckRange.CheckRange(this.gameObject, PlayerData.ActiveItem, playerCheckRange.Range/3))
+        if (!Calculate.Range(this.gameObject, PlayerData.ActiveItem, playerCheckRange.Range/3))
         {
-            interactionText.SetText("");
+            canvasText.SetInteractionText("");
             return;
         }
-        interactionText.SetText("Press E to eat " + PlayerData.ActiveItem);
+
+        Item currentItem = PlayerData.ActiveItem.GetComponent<Item>();
+        if (currentItem == null)
+            Debug.LogError("Error Couldnt get component <Item> of Active Item");
+
+        canvasText.SetInteractionText("Press E to eat " + currentItem.Name);
 
         checkInput();
         

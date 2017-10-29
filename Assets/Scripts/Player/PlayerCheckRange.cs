@@ -17,6 +17,13 @@ public class PlayerCheckRange : MonoBehaviour {
     [SerializeField]
     private List<GameObject> itemsInRange = new List<GameObject>();
 
+    private GameObject currentActiveObject;
+
+    private void Start()
+    {
+        currentActiveObject = PlayerData.ActiveItem;
+    }
+
     private void Update()
     {
         sphereCast();
@@ -26,21 +33,18 @@ public class PlayerCheckRange : MonoBehaviour {
     /// <summary>
     /// Check which item is the closest to the player.
     /// </summary>
-    /// <param name="obj"></param>
     private void checkItemDistance()
     {
-        GameObject currentActiveObject;
-        currentActiveObject = PlayerData.ActiveItem;
-
         for (int i = 0; i < itemsInRange.Count; i++)
         {
 
-            if (!CheckRange(this.gameObject, itemsInRange[i], range))
+            if (!Calculate.Range(this.gameObject, itemsInRange[i], range))
             {
-                if (itemsInRange[i] == null)
+                if (itemsInRange[i] != null)
+                {
+                    DeleteItem(false,itemsInRange[i]);
                     return;
-                DeleteItem(itemsInRange[i]);
-                return;
+                }
             }
 
             if (currentActiveObject == null)
@@ -50,12 +54,14 @@ public class PlayerCheckRange : MonoBehaviour {
                 return;
             }
 
-            if(getDistance(currentActiveObject) > getDistance(itemsInRange[i]))
+            if(Calculate.Distance(this.gameObject,currentActiveObject) > Calculate.Distance(this.gameObject,itemsInRange[i]))
             {
                 currentActiveObject = itemsInRange[i];
                 PlayerData.ActiveItem = currentActiveObject;
             }
+
         }
+
 
     }
 
@@ -66,7 +72,7 @@ public class PlayerCheckRange : MonoBehaviour {
     {
         Collider[] colliders;
 
-        colliders = Physics.OverlapSphere(this.transform.position + Vector3.up, range, LayerMask.NameToLayer("Items"));
+        colliders = Physics.OverlapSphere(this.transform.position, range);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (!colliders[i].CompareTag("pickup"))
@@ -90,48 +96,20 @@ public class PlayerCheckRange : MonoBehaviour {
         itemsInRange.Add(obj);
     }
 
-    public void DeleteItem(GameObject obj)
+    public void DeleteItem(bool checker, GameObject obj)
     {
+        if(!checker)
+        {
+            itemsInRange.Remove(obj);
+            return;
+        }
         for (int i = 0; i < itemsInRange.Count; i++)
         {
-            if (obj.name != itemsInRange[i].name)
-                break;
-            itemsInRange.Remove(obj);
+            if(obj == itemsInRange[i] && obj == PlayerData.ActiveItem)
+                itemsInRange.Remove(obj);
         }
+       
     }
 
-    /// <summary>
-    /// Returns true if the object is within the range from the position of the player.
-    /// </summary>
-    /// <param name="objA"></param>
-    /// <param name="objB"></param>
-    /// <param name="_range"></param>
-    /// <returns></returns>
-    public bool CheckRange(GameObject objA, GameObject objB, float _range)
-    {
-        if (objA == null || objB == null)
-            return false;
-        float distance;
 
-        distance = Vector3.Distance(objA.transform.position, objB.transform.position);
-
-        if (distance <= _range)
-            return true;
-
-        return false;
-    }
-
-    /// <summary>
-    /// Get the distance in float.
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    private float getDistance(GameObject obj)
-    {
-        float distance;
-
-        distance = Vector3.Distance(this.transform.position, obj.transform.position);
-
-        return distance;
-    }
 }

@@ -24,11 +24,11 @@ public class CameraFollowObject : MonoBehaviour {
     [SerializeField]
     private float movementSpeed;
 
-    private CameraZoom cameraZoom;
+    //private CameraZoom cameraZoom;
 
     private void Start()
     {
-        cameraZoom = GetComponent<CameraZoom>();
+        //cameraZoom = GetComponent<CameraZoom>();
         
     }
 
@@ -48,9 +48,7 @@ public class CameraFollowObject : MonoBehaviour {
 
         Vector3 newPos = targetRotation * offset;
         newPos += new Vector3(target.transform.position.x, target.transform.position.y, target.transform.position.z);
-        
-        
+       
         this.transform.position = newPos;
-        
     }
 }

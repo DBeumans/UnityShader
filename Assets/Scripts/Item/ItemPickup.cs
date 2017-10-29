@@ -18,7 +18,7 @@ public class ItemPickup : MonoBehaviour {
 
     private void destroyItem(GameObject obj)
     {
-        playerCheckRange.DeleteItem(obj);
+        playerCheckRange.DeleteItem(true,obj);
         Destroy(obj);
     }
 }

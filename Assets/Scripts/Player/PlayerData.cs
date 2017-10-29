@@ -27,5 +27,5 @@ public class PlayerData : MonoBehaviour {
             activeItem = value;
         }
     }
-    
+
 }

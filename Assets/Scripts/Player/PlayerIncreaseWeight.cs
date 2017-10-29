@@ -16,24 +16,24 @@ public class PlayerIncreaseWeight : MonoBehaviour {
     private float amount;
 
     public static Action WeightEvent;
+
+    private UIText canvasText;
     
     private void Start()
     {
-        getMaterials();
-
+        canvasText = FindObjectOfType<UIText>();
+        materials = GetComponentsInChildren<Renderer>();
         WeightEvent += addWeight;
         
-    }
-
-    private void getMaterials()
-    {
-        materials = GetComponentsInChildren<Renderer>();
     }
 
     private void addWeight()
     {
         if (currentWeight >= max_weight)
+        {
+            canvasText.SetNotificationText("<color=red> You're to fat ! </color>");
             return;
+        }
 
         GameObject go = PlayerData.ActiveItem;
         Item goItem = go.GetComponent<Item>();
@@ -42,8 +42,6 @@ public class PlayerIncreaseWeight : MonoBehaviour {
             Debug.LogError("Please add Item script to " + go.name);
 
         amount = goItem.Calories;
-
-        Debug.Log(amount);
 
         for (int i = 0; i < materials.Length; i++)
         {

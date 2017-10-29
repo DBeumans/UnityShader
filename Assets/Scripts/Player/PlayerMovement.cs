@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField]
     private float movementSpeed;
 
+    float currentSpeed;
+    float backwardsSpeed;
+
     private Rigidbody rigid;
 
     private Vector3 horizontalMovement;
@@ -21,6 +24,10 @@ public class PlayerMovement : MonoBehaviour {
     { 
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+
+        currentSpeed = movementSpeed;
+        backwardsSpeed = movementSpeed / 2;
+
     }
 
     private void Update()
@@ -31,31 +38,32 @@ public class PlayerMovement : MonoBehaviour {
         Vector3 h_movement = transform.forward * vertical;
         Vector3 v_movement = transform.right * horizontal;
 
-        horizontalMovement = h_movement;
-        verticalMovement = v_movement;
+        horizontalMovement = h_movement.normalized;
+        verticalMovement = v_movement.normalized;
 
-        isMoving = false;
+        isMoving = true;
 
         if (horizontal != 0 || vertical != 0)
         {
-            isMoving = true;
+            isMoving = false;
         }
 
-        if (InputManager.Get_Key_Shift)
-        {
-            movementSpeed = 10;
-            isRunning = true;
-        }
-        else
-        {
-            movementSpeed = 5;
-            isRunning = false;
-        }
+        checkDirectionSpeed(vertical);
+
 
         animator.SetBool("isIdle", isMoving);
         animator.SetBool("isRunning", isRunning);
         animator.SetFloat("MovementX", horizontal);
         animator.SetFloat("MovementY", vertical);
+    }
+
+    private void checkDirectionSpeed(float dir)
+    {
+
+        if (dir < 0)
+            movementSpeed = backwardsSpeed;
+        else
+            movementSpeed = currentSpeed;
     }
 
     private void FixedUpdate()
