@@ -35,11 +35,10 @@ public class InputManager : MonoBehaviour {
         mouseY = Input.GetAxis("Mouse Y");
 
         key_shift = Input.GetKey(keycode_shift);
-        key_e = Input.GetKeyDown(keycode_e);
+        key_e = Input.GetKeyDown(keycode_e);   
         
-
         if (Input.GetKeyDown(KeyCode.Space))
-            Cursor.lockState = CursorLockMode.Locked;
+            CursorLockState.ToggleCursorLockState();
 
 
     }
