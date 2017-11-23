@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// This script will check from the player which items are near the player.
 /// All the items within a certain range will be saved in a array ( list ).
-/// The script will set the closest item to the player as the active item that you will be able in the PlayerData script ( PlayerData.ActiveItem ).
+/// The script will set the closest item to the player as the active item.
 /// </summary>
 public class PlayerCheckRange : MonoBehaviour {
 
